@@ -55,4 +55,4 @@
 ❌ NestJS verify JWT token through Laravel  
   
 ### Other Requirement  
-❌ API documentation using Swagger  
+✅ API documentation using Swagger  
