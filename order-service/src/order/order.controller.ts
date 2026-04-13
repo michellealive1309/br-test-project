@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe, UseGuards, Query, Headers, HttpCode, HttpStatus, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe, UseGuards, Query, Headers, HttpCode, HttpStatus, Put, Req } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiHeaders } from '@nestjs/swagger';
+import type { Request } from 'express';
 
 @Controller('order')
 @UseGuards(AuthGuard)
@@ -13,8 +14,8 @@ export class OrderController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createOrderDto: CreateOrderDto, @Headers('Authorization') authHeader: string) {
-    const token = authHeader.split(' ')[1] ?? '';
+  create(@Body() createOrderDto: CreateOrderDto, @Req() request: Request) {
+    const token = request.headers.authorization?.split(' ')[1] ?? '';
     return this.orderService.create(createOrderDto, token);
   }
 
@@ -32,8 +33,8 @@ export class OrderController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateOrderDto: UpdateOrderDto, @Headers('Authorization') authHeader: string) {
-    const token = authHeader.split(' ')[1] ?? '';
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateOrderDto: UpdateOrderDto, @Req() request: Request) {
+    const token = request.headers.authorization?.split(' ')[1] ?? '';
     return this.orderService.update(id, updateOrderDto, token);
   }
 
