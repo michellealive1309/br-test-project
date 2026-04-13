@@ -10,7 +10,20 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: "User",
+    title: "User Model",
+    required: ["email", "password"],
+    properties: [
+        new OA\Property(property: "id", type: "integer", example: 1),
+        new OA\Property(property: "email", type: "string", example: "email@example.com"),
+        new OA\Property(property: "password", type: "string", format: "password", example: "123456"),
+        new OA\Property(property: "created_at", type: "string", format: "date-time", example: "2026-07-23 10:47:29"),
+        new OA\Property(property: "updated_at", type: "string", format: "date-time", example: "2026-07-23 10:47:29")
+    ]
+)]
 #[Fillable(['id', 'name', 'email', 'password', 'created_at', 'updated_at'])]
 #[Hidden(['password'])]
 #[Table('users', key: 'id')]
