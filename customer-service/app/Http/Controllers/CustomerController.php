@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
 use App\Http\Requests\CreateCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
@@ -32,8 +33,9 @@ class CustomerController extends ApiController
         ]);
 
         [$page, $limit] = [$validated['page'] ?? 1, $validated['limit'] ?? 10];
+        $customers = Customer::offset(--$page * $limit)->limit($limit)->get();
 
-        return response()->json(Customer::paginate($limit, ['*'], 'page', $page));
+        return ApiResponse::success($customers);
     }
 
     #[OA\Get(
@@ -52,10 +54,10 @@ class CustomerController extends ApiController
     {
         $customer = Customer::find($id);
         if (!$customer) {
-            return response()->json(['message' => 'Customer not found'], 404);
+            return ApiResponse::error('Customer not found', null, 404);
         }
 
-        return response()->json($customer);
+        return ApiResponse::success($customer);
     }
 
     #[OA\Get(
@@ -70,7 +72,7 @@ class CustomerController extends ApiController
     {
         $customerList = Customer::select('id', 'name')->limit(100)->get();
 
-        return response()->json($customerList);
+        return ApiResponse::success($customerList);
     }
 
     #[OA\Post(
@@ -92,7 +94,7 @@ class CustomerController extends ApiController
 
         $customer = Customer::create($validated);
 
-        return response()->json($customer, 201);
+        return ApiResponse::success($customer);
     }
 
     #[OA\Put(
@@ -118,12 +120,12 @@ class CustomerController extends ApiController
 
         $customer = Customer::find($id);
         if (!$customer) {
-            return response()->json(['message' => 'Customer not found'], 404);
+            return ApiResponse::error('Customer not found', null, 404);
         }
 
         $customer->update($validated);
 
-        return response()->json($customer);
+        return ApiResponse::success($customer);
     }
 
     #[OA\Delete(
@@ -142,11 +144,11 @@ class CustomerController extends ApiController
     {
         $customer = Customer::find($id);
         if (!$customer) {
-            return response()->json(['message' => 'Customer not found'], 404);
+            return ApiResponse::error('Customer not found', null, 404);
         }
 
         $customer->delete();
 
-        return response()->json(['message' => 'Deleted'], 204);
+        return ApiResponse::success($customer, 'Customer has been deleted');
     }
 }

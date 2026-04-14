@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +47,7 @@ class AuthController extends ApiController
 
         $token = Auth::login($user);
 
-        return response()->json(compact('user', 'token'));
+        return ApiResponse::success(compact('token'), 'Register successfully');
     }
 
     #[OA\Post(
@@ -73,13 +74,11 @@ class AuthController extends ApiController
         $loginRequest->validated();
 
         if (!$token = Auth::attempt($loginRequest->only('email', 'password'))) {
-            Log::info('Login failed for email or password');
-            return response()->json(['error' => 'Invalid user or password'], 401);
+            Log::info('Login failed for invalid email or password');
+            return ApiResponse::error('Invalid email or password', null, 400);
         }
 
-        return response()->json([
-            'token' => $token
-        ]);
+        return ApiResponse::success(compact('token'), "Log in successfully");
     }
 
     #[OA\Get(
@@ -103,7 +102,7 @@ class AuthController extends ApiController
     )]
     public function me()
     {
-        return response()->json(Auth::user());
+        return ApiResponse::success(Auth::user(), 'Success');
     }
 
     #[OA\Post(
@@ -119,6 +118,6 @@ class AuthController extends ApiController
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'Logged out']);
+        return ApiResponse::success(null, 'Logged out');
     }
 }
