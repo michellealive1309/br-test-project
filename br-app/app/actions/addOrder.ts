@@ -32,7 +32,7 @@ export async function addOrder(state: AddOrderState, formData: FormData): Promis
   } as unknown as Order;
 
   try {
-    const response = await createOrder(order)
+    const response = await createOrder(order);
 
     if (!response) {
       return {
