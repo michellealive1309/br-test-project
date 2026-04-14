@@ -22,7 +22,7 @@ export default async function Customer() {
           <CustomerForm formId={formId}></CustomerForm>
         </FormDialog>
       </div>
-      <DataTable columns={columns} data={paginatedCustomers?.data} />
+      <DataTable columns={columns} data={paginatedCustomers} />
     </div>
   );
 }

@@ -1,5 +1,7 @@
 // import { ApiResponse } from "@/src/types/api_response";
 
+import { ApiResponse } from "@/types/api-response";
+
 export class ApiError extends Error {
   status: number;
   data: any;
@@ -65,7 +67,7 @@ export class ApiClient {
       headers: this.headers,
     });
 
-    return response.status === 204;
+    return [200, 204].includes(response.status);
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {
@@ -74,8 +76,12 @@ export class ApiClient {
       throw new ApiError(response.status, errorText);
     }
 
-    const responseData: T = await response.json();
+    const responseData: ApiResponse<T> = await response.json();
 
-    return responseData;
+    if (!responseData.success) {
+      throw new ApiError(response.status, responseData.message);
+    }
+
+    return responseData.data;
   }
 }
