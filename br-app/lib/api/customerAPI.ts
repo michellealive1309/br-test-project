@@ -13,7 +13,7 @@ export async function login(email: string, password: string): Promise<string> {
     const token = await apiClient.post<{ token: string }>('auth/login', { email, password });
     return token.token;
   } catch (error) {
-    console.log('Login error:', (error instanceof ApiError ? error.data : "Network error"));
+    console.log('Login error:', (error instanceof ApiError ? error.data : "Unknown error"));
     return '';
   }
 }
@@ -25,7 +25,7 @@ export async function logout() {
     await apiClient.post<{ message: string }>('auth/logout', {});
     return true;
   } catch (error) {
-    console.log('Logout error:', (error instanceof ApiError ? error.data : "Network error"));
+    console.log('Logout error:', (error instanceof ApiError ? error.data : "Unknown error"));
     return false;
   }
 }
@@ -37,7 +37,7 @@ export async function me() {
     const user = await apiClient.get<User>('auth/me');
     return user;
   } catch (error) {
-    console.log('Fetch user error:', (error instanceof ApiError ? error.data : "Network error"));
+    console.log('Fetch user error:', (error instanceof ApiError ? error.data : "Unknown error"));
     return null;
   }
 }
@@ -56,10 +56,10 @@ export async function getCustomers(page: number = 1, limit: number = 10) {
   apiClient.addHeader('Authorization', `Bearer ${token}`);
 
   try {
-    const customers = await apiClient.get<PaginateApiResponse<Customer[]>>('customers?page=' + page + '&limit=' + limit);
+    const customers = await apiClient.get<Customer[]>('customers?page=' + page + '&limit=' + limit);
     return customers;
   } catch (error) {
-    console.log('Fetch customers error:', (error instanceof ApiError ? error.data : "Network error"));
+    console.log('Fetch customers error:', (error instanceof ApiError ? error.data : "Unknown error"));
     return null;
   }
 }
@@ -72,7 +72,7 @@ export async function getCustomersList() {
     const customersList = await apiClient.get<{ id: number, name: string }[]>('customers/list');
     return customersList;
   } catch (error) {
-    console.log('Fetch customers error:', (error instanceof ApiError ? error.data : "Network error"));
+    console.log('Fetch customers error:', (error instanceof ApiError ? error.data : "Unknown error"));
     return null;
   }
 }
@@ -84,7 +84,7 @@ export async function getCustomerById(id: number) {
     const customer = await apiClient.get<Customer>(`customers/${id}`);
     return customer;
   } catch (error) {
-    console.log('Fetch customer error:', (error instanceof ApiError ? error.data : "Network error"));
+    console.log('Fetch customer error:', (error instanceof ApiError ? error.data : "Unknown error"));
     return null;
   }
 }
@@ -96,7 +96,7 @@ export async function createCustomer(customerData: Customer) {
     const customer = await apiClient.post<Customer>('customers', customerData);
     return customer;
   } catch (error) {
-    console.log('Create customer error:', (error instanceof ApiError ? error.data : "Network error"));
+    console.log('Create customer error:', (error instanceof ApiError ? error.data : "Unknown error"));
     return null;
   }
 }
@@ -108,7 +108,7 @@ export async function updateCustomer(id: number, customerData: Customer) {
     const customer = await apiClient.put<Customer>(`customers/${id}`, customerData);
     return customer;
   } catch (error) {
-    console.log('Update customer error:', (error instanceof ApiError ? error.data : "Network error"));
+    console.log('Update customer error:', (error instanceof ApiError ? error.data : "Unknown error"));
     return null;
   }
 }
@@ -120,7 +120,7 @@ export async function deleteCustomer(id: number) {
     const result = await apiClient.delete(`customers/${id}`);
     return result;
   } catch (error) {
-    console.log('Delete customer error:', (error instanceof ApiError ? error.data : "Network error"));
+    console.log('Delete customer error:', (error instanceof ApiError ? error.data : "Unknown error"));
     return null;
   }
 }
