@@ -10,6 +10,7 @@ import { catchError, firstValueFrom } from 'rxjs';
 import { Customer } from '../types/customer';
 import { AxiosError } from 'axios';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ApiResponse } from '../dto/api-response.dto';
 
 @Injectable()
 export class OrderService {
@@ -109,7 +110,7 @@ export class OrderService {
       }
     };
     const { data } = await firstValueFrom(
-      this.httpService.get<Customer>(`/api/customers/${customer_id}`, config).pipe(
+      this.httpService.get<ApiResponse<Customer>>(`/api/customers/${customer_id}`, config).pipe(
         catchError((error: AxiosError) => {
           if (error.response?.status !== 404) {
             throw new HttpException('Failed to validate customer: Customer service unavailable', HttpStatus.SERVICE_UNAVAILABLE);
@@ -120,7 +121,7 @@ export class OrderService {
       )
     );
 
-    if (!data || data.id !== customer_id) {
+    if (!data.success || data.data.id !== customer_id) {
       return false;
     }
     
