@@ -6,7 +6,7 @@ import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiHeaders } from '@nestjs/swagger';
 import type { Request } from 'express';
 
-@Controller('order')
+@Controller('api/orders')
 @UseGuards(AuthGuard)
 @ApiBearerAuth('token')
 export class OrderController {
