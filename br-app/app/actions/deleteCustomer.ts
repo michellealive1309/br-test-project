@@ -14,7 +14,6 @@ export async function deleteCustomer(state: DeleteCustomerState, formData: FormD
 
   try {
     const response = await deleteCustomerAPI(id);
-
     if (!response) {
       return {
         success: false,

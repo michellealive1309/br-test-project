@@ -10,7 +10,6 @@ export type DeleteOrderState = {
 
 export async function deleteOrder(state: DeleteOrderState, formData: FormData): Promise<DeleteOrderState> {
   const id = formData.get('order_id') as string;
-console.log(id);
   try {
     const response = await deleteOrderAPI(+id);
 
