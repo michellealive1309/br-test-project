@@ -5,7 +5,7 @@
 ✅ Validation  
 ✅ Email is unique  
 ✅ Migration  
-❌ Consistencies response format  
+✅ Consistencies response format  
   
 ## Order Service (NestJS)  
 ✅ Order APIs must be protected routes  
